@@ -963,3 +963,4 @@ Received Import Request.
   path: Assets/ObjectsImpot/Heroes/axe/ybot@Jumping (1).fbx
   artifactKey: Guid(da509479186266b4c98367f6fa018980) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
 Start importing Assets/ObjectsImpot/Heroes/axe/ybot@Jumping (1).fbx using Guid(da509479186266b4c98367f6fa018980) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0a825748ad4a199b5c50e3ef66a2df51') in 0.012525 seconds 
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file
