@@ -40,10 +40,16 @@ public class playerController : MonoBehaviour
         Vector3 jumpDirection = new Vector3(0, 0, vertical).normalized;
 
         bool jump = Input.GetButtonDown("Jump");
+        bool attack = Input.GetButtonDown("Attack");
         if(jump && jumpCount > 0)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             jumpCount--;
+        }
+
+        if (attack)
+        {
+            animator.SetTrigger("attack");
         }
 
         if (horizontal != 0)
