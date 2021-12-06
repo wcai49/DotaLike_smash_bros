@@ -4,13 +4,20 @@ using UnityEngine;
 
 public class heroProperties : MonoBehaviour
 {
+    // move and jump
     public float moveSpeed;
     public float jumpHeight;
+
+    // attack
+    public Transform attackPoint;
     public float attackDamage;
     public float attackSpeed;
     public float attackRange;
     public float defense;
 
+    // defense
+
+    // spells
     public void castSpell1()
     {
         Debug.Log("Berserker's Call");
@@ -28,5 +35,12 @@ public class heroProperties : MonoBehaviour
     {
         Debug.Log("Culling Blade");
     }
-    
+    void OnDrawGizmosSelected()
+    {
+        if (attackPoint == null)
+        {
+            return;
+        }
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    }
 }

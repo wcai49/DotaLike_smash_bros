@@ -4,30 +4,50 @@ using UnityEngine;
 
 public class playerController : MonoBehaviour
 {
+    // Unity system
     public CharacterController controller;
-    public float curr_movespeed = 6f;
-    public float gravity = -9.81f;
-    public int jumpCount = 2;
-
-    public Transform groundCheck;
-    public float groundDistance = 0.4f;
-    public LayerMask groundMask;
-
     heroProperties properties;
-
-    Vector3 velocity;
     Animator animator;
-    bool isGrounded;
+
+    // Character move and jump
+    public float curr_movespeed = 6f;
+    public int jumpCount = 2;
+    Vector3 velocity;
     int jumpDefault;
     float jumpHeight;
 
+    // Environment relevant
+    public float gravity = -9.81f;
+    public Transform groundCheck;
+    public float groundDistance = 0.4f;
+    public LayerMask groundMask;
+    bool isGrounded;
+
+    // Attack relevant
+    public float curr_attackDamage;
+    public float curr_attackSpeed;
+    float attackCoolDown = 0f;
+    float attackRange;
+    public LayerMask enemyLayers;
+    Transform attackPoint;
+
+    // Sound relevant
+    public AudioSource attackSound;
+    public AudioSource attackHitSound;
     private void Start()
     {
         properties = GetComponent<heroProperties>();
 
+        // assigning move and jump
         curr_movespeed = properties.moveSpeed;
         jumpHeight = properties.jumpHeight;
         jumpDefault = jumpCount;
+        // assigning attack relevant
+        curr_attackDamage = properties.attackDamage;
+        curr_attackSpeed = properties.attackSpeed;
+        attackRange = properties.attackRange;
+        attackPoint = properties.attackPoint;
+        // Unity system
         animator = GetComponent<Animator>();
     }
     private void Update()
@@ -46,7 +66,24 @@ public class playerController : MonoBehaviour
         bool jump = Input.GetButtonDown("Jump");
         bool attack = Input.GetButtonDown("Attack");
         Vector3 jumpDirection = new Vector3(0, 0, vertical).normalized;
-
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
+        
+        if(Time.time >= attackCoolDown)
+        {
+            if (attack)
+            {
+                attackSound.Play(0);
+                animator.SetTrigger("attack");
+                Collider[] hitEnermies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
+                foreach (Collider enemy in hitEnermies)
+                {
+                    attackHitSound.Play(0);
+                    enemy.GetComponent<EnemyProperties>().takeDamage(curr_attackDamage);
+                }
+                attackCoolDown = Time.time + 1f / curr_attackSpeed;
+            }
+        }
         
         if(jump && jumpCount > 0)
         {
@@ -56,16 +93,10 @@ public class playerController : MonoBehaviour
             animator.SetBool("isGrounded", false);
         }
 
-        if (attack)
-        {
-            horizontal = 0;
-            animator.SetTrigger("attack");
-        }
-
         if (horizontal != 0)
         {
             animator.SetBool("isMoving", true);
-            transform.rotation = horizontal > 0 ? Quaternion.Euler(0f, 120f, 0f) : Quaternion.Euler(0f, -120f, 0f);
+            transform.rotation = horizontal > 0 ? Quaternion.Euler(0f, 90f, 0f) : Quaternion.Euler(0f, -90f, 0f);
             controller.Move(curr_movespeed * new Vector3(horizontal, 0,0) * Time.deltaTime);   
         }
         else
@@ -75,7 +106,7 @@ public class playerController : MonoBehaviour
 
         if(vertical != 0)
         {
-            if (vertical < 0 && isGrounded)
+            if (vertical == -1 && isGrounded )
             {
                 animator.SetBool("isLying", true);
             }
@@ -91,7 +122,7 @@ public class playerController : MonoBehaviour
 
 
 
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        
     }
+    
 }
