@@ -5,6 +5,7 @@ using UnityEngine;
 public class playerController : MonoBehaviour
 {
     // Unity system
+    public GameObject eventSystem;
     public CharacterController controller;
     heroProperties properties;
     Animator animator;
@@ -22,7 +23,8 @@ public class playerController : MonoBehaviour
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
     bool isGrounded;
-
+    public LayerMask boundaryMask;
+    bool isBoundary;
     // Attack relevant
     public float curr_attackDamage;
     public float curr_attackSpeed;
@@ -53,6 +55,13 @@ public class playerController : MonoBehaviour
     private void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        isBoundary = Physics.CheckSphere(groundCheck.position, groundDistance, boundaryMask);
+
+        if (isBoundary)
+        {
+            eventSystem.GetComponent<GameSystem>().player1Die();
+            return;
+        }
         if (isGrounded && velocity.y < 0) {
             animator.SetBool("isGrounded", true);
             jumpCount = jumpDefault;
