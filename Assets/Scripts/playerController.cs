@@ -93,6 +93,10 @@ public class playerController : MonoBehaviour
                 attackCoolDown = Time.time + 1f / curr_attackSpeed;
             }
         }
+        else
+        {
+            return;
+        }
         
         if(jump && jumpCount > 0)
         {
