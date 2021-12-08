@@ -4,8 +4,17 @@ using UnityEngine;
 
 public class EnemyProperties : MonoBehaviour
 {
+    GameObject gameSystem;
+    Animator animator;
+
+    public void Start()
+    {
+        gameSystem = GameObject.Find("EventSystem");
+        animator = GetComponent<Animator>();
+    }
     public void takeDamage(float damage)
     {
-        Debug.Log("Received" + damage + "damage.");
+        gameSystem.GetComponent<GameSystem>().enemyHit(damage);
+        animator.SetTrigger("gotHit");
     }
 }

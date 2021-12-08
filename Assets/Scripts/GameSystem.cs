@@ -30,7 +30,11 @@ public class GameSystem : MonoBehaviour
 
         updateCanvas();
     }
-
+    public void enemyHit(float damage)
+    {
+        player2_knockValue += damage;
+        updateCanvas();
+    }
     public void player1Die()
     {
         if(player1_headCount == 0)
