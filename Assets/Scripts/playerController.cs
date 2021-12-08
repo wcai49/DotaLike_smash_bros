@@ -39,7 +39,7 @@ public class playerController : MonoBehaviour
     private void Start()
     {
         properties = GetComponent<heroProperties>();
-
+        eventSystem = GameObject.Find("EventSystem");
         // assigning move and jump
         curr_movespeed = properties.moveSpeed;
         jumpHeight = properties.jumpHeight;

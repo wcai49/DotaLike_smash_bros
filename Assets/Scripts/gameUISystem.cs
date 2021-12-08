@@ -35,8 +35,16 @@ public class gameUISystem : MonoBehaviour
             p1_headcount = p1_hc;
         }
         else if(p1_hc < p1_headcount)
-        {
-            Destroy(p1_knock.transform.GetChild(p1_headcount - 1).gameObject);
+        {   
+            if(p1_headcount == p1_knock.transform.childCount)
+            {
+                Destroy(p1_knock.transform.GetChild(p1_headcount - 1).gameObject);
+                p1_headcount--;
+            }
+            else
+            {
+                return;
+            }
         }
 
         // so does player2
@@ -55,7 +63,15 @@ public class gameUISystem : MonoBehaviour
         }
         else if (p2_hc < p2_headcount)
         {
-            Destroy(p2_knock.transform.GetChild(p2_headcount - 1).gameObject);
+            if (p2_headcount == p2_knock.transform.childCount)
+            {
+                Destroy(p2_knock.transform.GetChild(p2_headcount - 1).gameObject);
+                p2_headcount--;
+            }
+            else
+            {
+                return;
+            }
         }
     }
 
