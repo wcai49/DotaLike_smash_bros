@@ -57,11 +57,16 @@ public class playerController : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         isBoundary = Physics.CheckSphere(groundCheck.position, groundDistance, boundaryMask);
 
+        // if the player is at the boundary, then he will die.
         if (isBoundary)
         {
             eventSystem.GetComponent<GameSystem>().player1Die();
             return;
         }
+        // if the player is on the ground, do 3 things:
+        // 1. tell animator that the character is on the ground
+        // 2. reset the jumpcount
+        // 3. keep the velocity of y as -2f, instead of accelerating.
         if (isGrounded && velocity.y < 0) {
             animator.SetBool("isGrounded", true);
             jumpCount = jumpDefault;
@@ -74,7 +79,8 @@ public class playerController : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
         bool jump = Input.GetButtonDown("Jump");
         bool attack = Input.GetButtonDown("Attack");
-        Vector3 jumpDirection = new Vector3(0, 0, vertical).normalized;
+
+        // character will fall down due to the effect of gravity
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
         
@@ -92,10 +98,6 @@ public class playerController : MonoBehaviour
                 }
                 attackCoolDown = Time.time + 1f / curr_attackSpeed;
             }
-        }
-        else
-        {
-            return;
         }
         
         if(jump && jumpCount > 0)
@@ -119,13 +121,12 @@ public class playerController : MonoBehaviour
 
         if(vertical != 0)
         {
+            Vector3 jumpDirection = new Vector3(0, 0, vertical).normalized;
+
+            // if the character is on the ground and player press down button, then lay down.
             if (vertical == -1 && isGrounded )
             {
                 animator.SetBool("isLying", true);
-            }
-            else
-            {
-                Debug.Log("Pressing up");
             }
         }
         else
