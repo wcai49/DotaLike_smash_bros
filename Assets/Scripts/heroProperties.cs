@@ -14,6 +14,7 @@ public class heroProperties : MonoBehaviour
     public float attackSpeed;
     public float attackRange;
     public float defense;
+    public float attackRecover;
 
     // defense
 

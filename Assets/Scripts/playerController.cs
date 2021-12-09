@@ -30,6 +30,8 @@ public class playerController : MonoBehaviour
     public float curr_attackSpeed;
     float attackCoolDown = 0f;
     float attackRange;
+    float attackRecover;
+    float attackRecover_timer = 0f;
     public LayerMask enemyLayers;
     Transform attackPoint;
 
@@ -49,6 +51,7 @@ public class playerController : MonoBehaviour
         curr_attackSpeed = properties.attackSpeed;
         attackRange = properties.attackRange;
         attackPoint = properties.attackPoint;
+        attackRecover = properties.attackRecover;
         // Unity system
         animator = GetComponent<Animator>();
     }
@@ -63,6 +66,16 @@ public class playerController : MonoBehaviour
             eventSystem.GetComponent<GameSystem>().player1Die();
             return;
         }
+
+        // for each frame, if attackRecover is required, means that the character just attacked,
+        // during this time, the character should freeze : no move, no jump, no attack again, no lay down,
+        // until the recover time is over;
+        if (attackRecover_timer > 0)
+        {
+            attackRecover_timer -= Time.deltaTime;
+            return;
+        }
+        
         // if the player is on the ground, do 3 things:
         // 1. tell animator that the character is on the ground
         // 2. reset the jumpcount
@@ -73,7 +86,6 @@ public class playerController : MonoBehaviour
             velocity.y = -2f;
         }
 
-
         // collect different inputs.
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
@@ -81,9 +93,11 @@ public class playerController : MonoBehaviour
         bool attack = Input.GetButtonDown("Attack");
 
         // character will fall down due to the effect of gravity
+        // PS: if the character is in attack_recover, it will hold and freeze in the air
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
         
+        // everytime the player attack, it will update the next allowed attack time: Time.time + attackCooldown
         if(Time.time >= attackCoolDown)
         {
             if (attack)
@@ -97,6 +111,7 @@ public class playerController : MonoBehaviour
                     enemy.GetComponent<EnemyProperties>().takeDamage(curr_attackDamage);
                 }
                 attackCoolDown = Time.time + 1f / curr_attackSpeed;
+                attackRecover_timer = attackRecover;
             }
         }
         
@@ -133,10 +148,7 @@ public class playerController : MonoBehaviour
         {
             animator.SetBool("isLying", false);
         }
-
-
-
-        
+       
     }
     
 }

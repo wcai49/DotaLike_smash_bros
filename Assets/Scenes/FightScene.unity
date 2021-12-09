@@ -3267,6 +3267,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 1.039
       objectReference: {fileID: 0}
+    - target: {fileID: 7189520192763224832, guid: ce7d1a428be27084db7028b9eeb113e6, type: 3}
+      propertyPath: attackRecover
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 7626178104849488730, guid: ce7d1a428be27084db7028b9eeb113e6, type: 3}
       propertyPath: m_Name
       value: AXE
