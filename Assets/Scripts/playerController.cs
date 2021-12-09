@@ -96,7 +96,7 @@ public class playerController : MonoBehaviour
         // PS: if the character is in attack_recover, it will hold and freeze in the air
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
-        
+
         // everytime the player attack, it will update the next allowed attack time: Time.time + attackCooldown
         if(Time.time >= attackCoolDown)
         {
@@ -104,12 +104,7 @@ public class playerController : MonoBehaviour
             {
                 attackSound.Play(0);
                 animator.SetTrigger("attack");
-                Collider[] hitEnermies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
-                foreach (Collider enemy in hitEnermies)
-                {
-                    attackHitSound.Play(0);
-                    enemy.GetComponent<EnemyProperties>().takeDamage(curr_attackDamage);
-                }
+                
                 attackCoolDown = Time.time + 1f / curr_attackSpeed;
                 attackRecover_timer = attackRecover;
             }
@@ -149,6 +144,15 @@ public class playerController : MonoBehaviour
             animator.SetBool("isLying", false);
         }
        
+    }
+    public void checkAttackPoint()
+    {
+        Collider[] hitEnermies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
+        foreach (Collider enemy in hitEnermies)
+        {
+            attackHitSound.Play(0);
+            enemy.GetComponent<EnemyProperties>().takeDamage(curr_attackDamage);
+        }
     }
     
 }
