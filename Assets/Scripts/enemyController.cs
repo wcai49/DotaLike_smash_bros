@@ -36,8 +36,8 @@ public class enemyController : MonoBehaviour
     Transform attackPoint;
 
     // Execute relevant
-    public float executeSpeed = 1f;
-    public float executeTime = 1.5f;
+    public float executeSpeed = 0.01f;
+    public float executeTime = 0.1f;
     public float curr_executeTime = 0f;
     // Sound relevant
     public AudioSource attackSound;
@@ -70,12 +70,10 @@ public class enemyController : MonoBehaviour
             eventSystem.GetComponent<GameSystem>().player2Die();
             return;
         }
-
         if(curr_executeTime > 0)
-        {
-            curr_executeTime -= Time.deltaTime;
-            GetComponent<CharacterController>().Move(new Vector3(executeSpeed, 0, 0));
-            
+        {   
+            curr_executeTime = curr_executeTime - 1 * Time.deltaTime;
+            GetComponent<CharacterController>().Move(new Vector3(executeSpeed*Time.deltaTime, 0, 0));
         }
         // for each frame, if attackRecover is required, means that the character just attacked,
         // during this time, the character should freeze : no move, no jump, no attack again, no lay down,
