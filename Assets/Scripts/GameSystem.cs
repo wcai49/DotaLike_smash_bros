@@ -10,7 +10,7 @@ public class GameSystem : MonoBehaviour
     public Transform respawnPoint;
     // The default head count, set by player or system default from last Scene.
     public int headCount;
-
+    float default_knockDist = 1.0f;
     public float player1_knockValue = 0.0f;
     public float player2_knockValue = 0.0f;
 
@@ -34,6 +34,13 @@ public class GameSystem : MonoBehaviour
     {
         player2_knockValue += damage;
         updateCanvas();
+    }
+    public void enemyExecute()
+    {
+        enemyController controller = player2.GetComponent<enemyController>();
+        controller.executeSpeed = default_knockDist * (1 + player2_knockValue / 100);
+        controller.curr_executeTime = controller.executeTime;
+
     }
     public void player1Die()
     {

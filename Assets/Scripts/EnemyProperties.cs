@@ -17,4 +17,8 @@ public class EnemyProperties : MonoBehaviour
         gameSystem.GetComponent<GameSystem>().enemyHit(damage);
         animator.SetTrigger("gotHit");
     }
+    public void takeExecution()
+    {
+        gameSystem.GetComponent<GameSystem>().enemyExecute();
+    }
 }

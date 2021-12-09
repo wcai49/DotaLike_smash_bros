@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerController : MonoBehaviour
+public class enemyController : MonoBehaviour
 {
     // Unity system
     public GameObject eventSystem;
@@ -35,6 +35,10 @@ public class playerController : MonoBehaviour
     public LayerMask enemyLayers;
     Transform attackPoint;
 
+    // Execute relevant
+    public float executeSpeed = 1f;
+    public float executeTime = 1.5f;
+    public float curr_executeTime = 0f;
     // Sound relevant
     public AudioSource attackSound;
     public AudioSource attackHitSound;
@@ -63,10 +67,16 @@ public class playerController : MonoBehaviour
         // if the player is at the boundary, then he will die.
         if (isBoundary)
         {
-            eventSystem.GetComponent<GameSystem>().player1Die();
+            eventSystem.GetComponent<GameSystem>().player2Die();
             return;
         }
 
+        if(curr_executeTime > 0)
+        {
+            curr_executeTime -= Time.deltaTime;
+            GetComponent<CharacterController>().Move(new Vector3(executeSpeed, 0, 0));
+            
+        }
         // for each frame, if attackRecover is required, means that the character just attacked,
         // during this time, the character should freeze : no move, no jump, no attack again, no lay down,
         // until the recover time is over;
@@ -87,10 +97,10 @@ public class playerController : MonoBehaviour
         }
 
         // collect different inputs.
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-        bool jump = Input.GetButtonDown("Jump");
-        bool attack = Input.GetButtonDown("Attack");
+        float horizontal = Input.GetAxisRaw("Horizontal2");
+        float vertical = Input.GetAxisRaw("Vertical2");
+        bool jump = Input.GetButtonDown("Jump2");
+        bool attack = Input.GetButtonDown("Attack2");
 
         // character will fall down due to the effect of gravity
         // PS: if the character is in attack_recover, it will hold and freeze in the air
