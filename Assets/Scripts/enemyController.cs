@@ -39,6 +39,8 @@ public class enemyController : MonoBehaviour
     public float executeSpeed = 0.01f;
     public float executeTime = 0.1f;
     public float curr_executeTime = 0f;
+    public Vector2 executeDirection = new Vector2(0f, 0f);
+
     // Sound relevant
     public AudioSource attackSound;
     public AudioSource attackHitSound;
@@ -73,7 +75,10 @@ public class enemyController : MonoBehaviour
         if(curr_executeTime > 0)
         {   
             curr_executeTime = curr_executeTime - 1 * Time.deltaTime;
-            GetComponent<CharacterController>().Move(new Vector3(executeSpeed*Time.deltaTime, 0, 0));
+            GetComponent<CharacterController>().Move(new Vector3(
+                executeSpeed * Time.deltaTime * executeDirection.x,
+                executeSpeed * Time.deltaTime * executeDirection.y, 
+                0));
         }
         // for each frame, if attackRecover is required, means that the character just attacked,
         // during this time, the character should freeze : no move, no jump, no attack again, no lay down,
@@ -159,8 +164,7 @@ public class enemyController : MonoBehaviour
         {
             attackHitSound.Play(0);
             enemy.GetComponent<EnemyProperties>().takeDamage(curr_attackDamage);
-            
-                enemy.GetComponent<EnemyProperties>().takeExecution();
+            //enemy.GetComponent<EnemyProperties>().takeExecution();
             
         }
     }

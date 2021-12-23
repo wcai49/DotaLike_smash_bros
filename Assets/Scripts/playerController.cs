@@ -151,8 +151,7 @@ public class playerController : MonoBehaviour
         {
             attackHitSound.Play(0);
             enemy.GetComponent<EnemyProperties>().takeDamage(curr_attackDamage);
-            
-                enemy.GetComponent<EnemyProperties>().takeExecution();
+            enemy.GetComponent<EnemyProperties>().takeExecution(transform.position);
             
         }
     }

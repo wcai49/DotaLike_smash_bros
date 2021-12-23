@@ -35,10 +35,12 @@ public class GameSystem : MonoBehaviour
         player2_knockValue += damage;
         updateCanvas();
     }
-    public void enemyExecute()
+    public void enemyExecute(Vector3 playerPos, Vector3 enemyPos)
     {
+        Vector2 executeDir = new Vector2(enemyPos.x - playerPos.x, enemyPos.y - playerPos.y);
         enemyController controller = player2.GetComponent<enemyController>();
         controller.executeSpeed = default_knockDist * Mathf.Pow((1 + player2_knockValue / 100),2);
+        controller.executeDirection = executeDir;
         controller.curr_executeTime = controller.executeTime;
 
     }
