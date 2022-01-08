@@ -7,6 +7,7 @@ public class playerController : MonoBehaviour
     // Unity system
     public GameObject eventSystem;
     public CharacterController controller;
+    public PlayerInput controls;
     heroProperties properties;
     Animator animator;
 
